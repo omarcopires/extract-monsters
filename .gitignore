@@ -39,3 +39,6 @@ Thumbs.db
 # Optional Files
 output/*
 monsters.txt
+
+# Cache for GUI remembered paths
+cache.json

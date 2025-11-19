@@ -6,7 +6,7 @@ from file_utils import load_creature_list, extract_monster_name, extract_summon_
 from ui_utils import show_scrollable_message
 
 
-def run_process(monsters_folder, output_folder, list_file):
+def run_process(monsters_folder, output_folder, list_file, update_progress):
 	creatures = load_creature_list(list_file)
 
 	exported_monsters = 0
@@ -26,8 +26,14 @@ def run_process(monsters_folder, output_folder, list_file):
 				if name:
 					all_monster_files[name] = path
 
+	total_steps = len(creatures) if len(creatures) > 0 else 1
+	current_step = 0
+
 	# Export monsters in the list
 	for creature in creatures:
+		current_step += 1
+		update_progress((current_step / total_steps) * 100)
+
 		if creature in all_monster_files:
 			src = all_monster_files[creature]
 			relative = os.path.relpath(os.path.dirname(src), monsters_folder)
@@ -38,7 +44,7 @@ def run_process(monsters_folder, output_folder, list_file):
 			exported_monsters += 1
 			found_monsters.add(creature)
 
-			# Extract summons of this monster
+			# Extract summons
 			summons = extract_summon_names(src)
 			for summon in summons:
 				if summon in all_monster_files:
@@ -52,18 +58,15 @@ def run_process(monsters_folder, output_folder, list_file):
 						exported_summons += 1
 						found_summons.add(summon)
 				else:
-					# Summon not found
 					found_summons.add(f"[MISSING] {summon}")
 
 	# Missing monsters log
 	missing_monsters = sorted(creatures - found_monsters)
 
-	# Missing summons (clean)
 	missing_summons = sorted(
 		s for s in found_summons if s.startswith("[MISSING]")
 	)
 
-	# Build final log
 	log = (
 		f"Export Finished!\n\n"
 		f"Monsters exported: {exported_monsters}\n"
@@ -76,7 +79,6 @@ def run_process(monsters_folder, output_folder, list_file):
 	if missing_summons:
 		log += "Summons NOT found:\n" + "\n".join(f"- {s[10:]}" for s in missing_summons) + "\n\n"
 
-	# If log too large, scrollable window
 	if log.count("\n") > 15:
 		show_scrollable_message("Finished", log)
 	else:
