@@ -1,0 +1,41 @@
+# Python cache and bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.egg
+*.whl
+
+# PyInstaller / executables
+*.exe
+*.spec
+*.dll
+*.pyd
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+
+# IDE / editor specific
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Optional Files
+output/*
+monsters.txt
