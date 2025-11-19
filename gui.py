@@ -42,6 +42,7 @@ def start_gui():
 		if not list_file or not os.path.isfile(list_file):
 			return messagebox.showerror("Error", "Select a valid creatures list file.")
 
+		# run_process already handles message windows
 		run_process(monsters, output, list_file)
 
 	tk.Label(root, text="Monsters Folder:").pack()
